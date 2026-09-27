@@ -1,0 +1,11 @@
+# one plugin repository per line: Name (same owner as this repository) or owner/Name
+EnemyDotsMeleeRing
+FocusSigns
+HoverHotbars
+KeepMouseOnScreen
+KickTracker
+PlateStack
+RepairHelper
+ScenarioGuideSkin
+ScreenNote
+TargetPlateArrows
