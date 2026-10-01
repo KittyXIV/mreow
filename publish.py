@@ -42,7 +42,8 @@ def fetch_source(slug, name, token):
     dest = WORK / "src" / name
     shutil.rmtree(dest, ignore_errors=True)
     auth = f"x-access-token:{token}@" if token else ""
-    result = run(["git", "clone", "--quiet", "--depth", "1", f"https://{auth}github.com/{slug}.git", str(dest)], check=False)
+    # submodules (the Kitty framework) resolve against this url, so they clone with the same token
+    result = run(["git", "clone", "--quiet", "--depth", "1", "--recurse-submodules", f"https://{auth}github.com/{slug}.git", str(dest)], check=False)
     if result.returncode != 0:
         # the clone url carries the token, so only git's own message is shown
         raise RuntimeError(f"clone of {slug} failed: {result.stderr.strip().replace(token, '***') if token else result.stderr.strip()}")
