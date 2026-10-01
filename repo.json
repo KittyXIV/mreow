@@ -1,6 +1,32 @@
 [
   {
     "Author": "aki",
+    "Name": "Chat 3.0",
+    "InternalName": "Chat3",
+    "AssemblyVersion": "1.1.9.0",
+    "Punchline": "WoW-style chat window.",
+    "Description": "Replaces the chat log with a themeable window: tabs, filters, whisper tabs. Works like WoW chat with Prat. KittyUI and Naowh looks included.",
+    "ApplicableVersion": "any",
+    "Tags": [
+      "UI",
+      "Chat"
+    ],
+    "DalamudApiLevel": 15,
+    "LoadRequiredState": 0,
+    "LoadSync": false,
+    "CanUnloadAsync": false,
+    "LoadPriority": 0,
+    "DownloadLinkInstall": "https://github.com/KittyXIV/mreow/releases/download/Chat3-1.1.9.0/Chat3.zip",
+    "DownloadLinkUpdate": "https://github.com/KittyXIV/mreow/releases/download/Chat3-1.1.9.0/Chat3.zip",
+    "DownloadLinkTesting": "https://github.com/KittyXIV/mreow/releases/download/Chat3-1.1.9.0/Chat3.zip",
+    "LastUpdate": 1790874599,
+    "Changelog": "- unlocked windows move by empty header space or the text area\n- tabs drag as tabs again",
+    "IsHide": false,
+    "IsTestingExclusive": false,
+    "AcceptsFeedback": false
+  },
+  {
+    "Author": "aki",
     "Name": "Enemy Dots Melee Ring",
     "InternalName": "EnemyDotsMeleeRing",
     "AssemblyVersion": "1.0.4.0",
