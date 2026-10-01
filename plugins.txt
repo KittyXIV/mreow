@@ -1,4 +1,5 @@
 # one plugin repository per line: Name (same owner as this repository) or owner/Name
+# builds Name.csproj, or the only .csproj at the repository root when the names differ
 EnemyDotsMeleeRing
 FocusSigns
 HoverHotbars

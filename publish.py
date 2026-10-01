@@ -49,6 +49,17 @@ def fetch_source(slug, name, token):
     return dest
 
 
+def find_csproj(src, repo_name):
+    # the repository name, else the one project at its root (repo chat-3.0 builds Chat3.csproj)
+    named = src / f"{repo_name}.csproj"
+    if named.exists():
+        return named
+    found = sorted(src.glob("*.csproj"))
+    if len(found) != 1:
+        raise RuntimeError(f"no {repo_name}.csproj and {len(found)} other .csproj files at the repository root")
+    return found[0]
+
+
 def csproj_value(csproj, pattern, what):
     match = re.search(pattern, csproj.read_text())
     if not match:
@@ -64,8 +75,9 @@ def hooks_api_level(dalamud_home):
     return match.group(1)
 
 
-def build(src, name):
-    result = run(["dotnet", "build", "-c", "Release", "--nologo", "-v", "q", str(src / f"{name}.csproj")], check=False)
+def build(src, csproj):
+    name = csproj.stem
+    result = run(["dotnet", "build", "-c", "Release", "--nologo", "-v", "q", str(csproj)], check=False)
     if result.returncode != 0:
         raise RuntimeError(f"build failed:\n{result.stdout[-4000:]}{result.stderr[-2000:]}")
     out = src / "bin" / "x64" / "Release" / name
@@ -131,15 +143,17 @@ def main():
         previous = {item["InternalName"]: item for item in json.loads(REPO_JSON.read_text())}
 
     entries, failures = [], []
-    for slug, name in read_plugins(owner):
+    for slug, repo_name in read_plugins(owner):
+        name = repo_name
         try:
-            src = args.local / name if args.local else fetch_source(slug, name, token)
-            csproj = src / f"{name}.csproj"
+            src = args.local / repo_name if args.local else fetch_source(slug, repo_name, token)
+            csproj = find_csproj(src, repo_name)
+            name = csproj.stem
             version = csproj_value(csproj, r"<Version>([^<]+)</Version>", "<Version>")
             sdk_api = csproj_value(csproj, r"Dalamud\.NET\.Sdk/(\d+)\.", "Dalamud.NET.Sdk version")
             if sdk_api != hooks_api:
                 raise RuntimeError(f"targets Dalamud.NET.Sdk {sdk_api} but the fetched Dalamud is API {hooks_api}")
-            manifest, zip_path = build(src, name)
+            manifest, zip_path = build(src, csproj)
             tag = f"{name}-{version}"
             url = f"https://github.com/{args.repo}/releases/download/{tag}/{name}.zip"
             notes = changelog_top(src)
