@@ -1,6 +1,7 @@
 # one plugin repository per line: Name (same owner as this repository) or owner/Name
 # builds Name.csproj, or the only .csproj at the repository root when the names differ
 # Name:path/to/Project.csproj builds that project instead, for a plugin inside a bigger repository
+# a trailing "testing" lists it only for players with plugin testing builds turned on
 EnemyDotsMeleeRing
 FocusSigns
 HoverHotbars
@@ -13,3 +14,4 @@ ScreenNote
 TargetPlateArrows
 chat-3.0:Chat3.csproj
 KittyXIV/KittyUI:companion/KittyUICompanion/KittyUICompanion.csproj
+kitty-framework:KittyGallery/KittyGallery.csproj testing

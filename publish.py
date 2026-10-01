@@ -31,14 +31,14 @@ def run(args, cwd=None, check=True, env=None):
 
 
 def read_plugins(owner):
-    # (owner/Repository, project path inside it or "")
+    # (owner/Repository, project path inside it or "", testing only)
     plugins = []
     for line in PLUGIN_LIST.read_text().splitlines():
-        line = line.split("#", 1)[0].strip()
-        if line:
-            repo, _, project = line.partition(":")
+        words = line.split("#", 1)[0].split()
+        if words:
+            repo, _, project = words[0].partition(":")
             slug = repo if "/" in repo else f"{owner}/{repo}"
-            plugins.append((slug, project.strip()))
+            plugins.append((slug, project, "testing" in words[1:]))
     return plugins
 
 
@@ -132,7 +132,7 @@ def create_release(tag, title, notes, zip_path, name):
     run(["gh", "release", "create", tag, str(asset), "--title", title, "--notes", notes or title])
 
 
-def entry(manifest, url, last_update, changelog):
+def entry(manifest, url, last_update, changelog, testing):
     item = {key: manifest[key] for key in MANIFEST_KEYS if manifest.get(key) not in (None, "", [])}
     item.update({
         "DownloadLinkInstall": url,
@@ -141,10 +141,14 @@ def entry(manifest, url, last_update, changelog):
         "LastUpdate": last_update,
         "Changelog": changelog,
         "IsHide": False,
-        "IsTestingExclusive": False,
+        "IsTestingExclusive": testing,
         # Dalamud's feedback button reports to goatcorp, not to a custom repo's author
         "AcceptsFeedback": False,
     })
+    if testing:
+        # Dalamud installs and updates a testing-only plugin through its testing version
+        item["TestingAssemblyVersion"] = manifest["AssemblyVersion"]
+        item["TestingDalamudApiLevel"] = manifest["DalamudApiLevel"]
     return item
 
 
@@ -169,7 +173,7 @@ def main():
         previous = {item["InternalName"]: item for item in json.loads(REPO_JSON.read_text())}
 
     entries, failures, clones = [], [], {}
-    for slug, project in read_plugins(owner):
+    for slug, project, testing in read_plugins(owner):
         name = Path(project).stem if project else slug.split("/", 1)[1]
         try:
             src = args.local / slug.split("/", 1)[1] if args.local else fetch_source(slug, env, clones)
@@ -194,7 +198,7 @@ def main():
                     create_release(tag, f"{manifest.get('Name', name)} {version}", notes, zip_path, name)
                     last_update = int(time.time())
                     state = "released"
-            entries.append(entry(manifest, url, last_update, notes))
+            entries.append(entry(manifest, url, last_update, notes, testing))
             print(f"{name} {version}: {state}")
         except Exception as ex:
             failures.append(name)
