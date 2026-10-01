@@ -11,4 +11,5 @@ RepairHelper
 ScenarioGuideSkin
 ScreenNote
 TargetPlateArrows
-chat-3.0
+chat-3.0:Chat3.csproj
+KittyXIV/KittyUI:companion/KittyUICompanion/KittyUICompanion.csproj
