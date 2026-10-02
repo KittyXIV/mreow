@@ -14,4 +14,3 @@ ScreenNote
 TargetPlateArrows
 chat-3.0:Chat3.csproj
 KittyXIV/KittyUI:companion/KittyUICompanion/KittyUICompanion.csproj
-kitty-framework:KittyGallery/KittyGallery.csproj testing
