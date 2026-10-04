@@ -15,3 +15,4 @@ TargetPlateArrows
 StatsDamageMeter:WMeter/WMeter.csproj
 chat-3.0:Chat3.csproj
 KittyXIV/KittyUI:companion/KittyUICompanion/KittyUICompanion.csproj
+StatsDamageMeter
