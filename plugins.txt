@@ -12,7 +12,6 @@ RepairHelper
 ScenarioGuideSkin
 ScreenNote
 TargetPlateArrows
-StatsDamageMeter:WMeter/WMeter.csproj
+StatsDamageMeter:StatsDamageMeter/StatsDamageMeter.csproj
 chat-3.0:Chat3.csproj
 KittyXIV/KittyUI:companion/KittyUICompanion/KittyUICompanion.csproj
-StatsDamageMeter
